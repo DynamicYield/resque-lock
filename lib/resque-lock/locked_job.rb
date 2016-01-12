@@ -13,6 +13,8 @@ module Resque
       end
 
       module ClassMethods
+        @__has_lock = false
+
         def lock_key *args
           args.to_json
         end
@@ -24,9 +26,11 @@ module Resque
             1
           key = lock_key *args
           if Resque.redis.incr("resque-lock:#{key}").to_i <= max_parallel_number
+            @__has_lock = true
             true
           else
             Resque.redis.decr "resque-lock:#{key}"
+            @__has_lock = false
             false
           end
         end
@@ -37,8 +41,9 @@ module Resque
         end
 
         def after_requeue_resque_lock *args
-          key = lock_key *args
-          Resque.redis.decr "resque-lock:#{key}"
+          if @__has_lock
+            after_perform_resque_lock *args
+          end
         end
 
         def on_failure_resque_lock *args
