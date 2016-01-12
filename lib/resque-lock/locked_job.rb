@@ -36,6 +36,11 @@ module Resque
           Resque.redis.decr "resque-lock:#{key}"
         end
 
+        def after_requeue_resque_lock *args
+          key = lock_key *args
+          Resque.redis.decr "resque-lock:#{key}"
+        end
+
         def on_failure_resque_lock *args
           after_perform_resque_lock *args
         end

@@ -11,5 +11,5 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.add_dependency 'resque', '~> 1.20'
-  s.add_dependency 'resque-reserve-hooks', '~> 0.0.1'
+  s.add_dependency 'resque-reserve-hooks', '~> 0.0.2'
 end
