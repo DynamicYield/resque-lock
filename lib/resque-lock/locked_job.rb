@@ -23,7 +23,7 @@ module Resque
             (respond_to?(:max_parallel_number) && klass.max_parallel_number) ||
             1
           key = lock_key *args
-          if Resque.redis.incr "resque-lock:#{key}" <= max_parallel_number
+          if Resque.redis.incr("resque-lock:#{key}").to_i <= max_parallel_number
             true
           else
             Resque.redis.decr "resque-lock:#{key}"
