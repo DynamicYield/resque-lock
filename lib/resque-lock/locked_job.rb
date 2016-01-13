@@ -46,7 +46,7 @@ module Resque
           end
         end
 
-        def on_failure_resque_lock *args
+        def on_failure_resque_lock _exception, *args
           after_perform_resque_lock *args
         end
       end
